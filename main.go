@@ -185,7 +185,7 @@ func main() {
 		stopContainers()
 		removeContainers()
 		removeVolumes()
-	case "kill-it-with-fire-before-it-lays-eggs":
+	case "purge":
 		stopContainers()
 		removeContainers()
 		removeVolumes()
