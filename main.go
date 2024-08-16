@@ -197,17 +197,24 @@ func main() {
 }
 
 func pruneSystem() {
-	printMessage("Pruning SYSTEM", Success)
 	output, err := runCommand("docker", "system", "prune", "-f")
 	if err != nil {
+		printMessage("Pruning SYSTEM", Success)
 		printMessage("Failed to prune system", Danger)
 	} else {
 		lines := strings.Split(string(output), "\n")
+		var reclaimedSpace string
 		for _, line := range lines {
 			if strings.Contains(line, "Total reclaimed space") {
-				printMessage(line)
+				reclaimedSpace = line
 				break
 			}
+		}
+		if reclaimedSpace != "Total reclaimed space: 0B" {
+			printMessage("Pruning SYSTEM", Success)
+			printMessage(reclaimedSpace)
+		} else {
+			printMessage("NOTHING to PRUNE", Danger)
 		}
 	}
 }
