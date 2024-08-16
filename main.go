@@ -163,7 +163,7 @@ func pluralise(count int) string {
 	return "s"
 }
 
-func printMessage(message string, msgType ...MessageType) {
+func colorise(message string, msgType ...MessageType) string {
 	reset := "\x1B[0m"
 	var style string
 
@@ -182,7 +182,7 @@ func printMessage(message string, msgType ...MessageType) {
 		style = reset
 	}
 
-	fmt.Printf("%s%s%s\n", style, message, reset)
+	return fmt.Sprintf("%s%s%s", style, message, reset)
 }
 
 func runCommand(command string, args ...string) ([]byte, error) {
@@ -199,24 +199,21 @@ func stopContainers() {
 
 	containerNames := strings.Fields(string(output))
 	if len(containerNames) == 0 {
-		printMessage("No CONTAINERS to STOP", Danger)
+		fmt.Println(colorise("No CONTAINERS to STOP", Danger))
 		return
 	}
 
-	printMessage("STOPPING CONTAINERS", Success)
 	stoppedContainerCount := 0
-
 	for _, container := range containerNames {
 		_, err = runCommand("docker", "stop", container)
 		if err != nil {
-			printMessage(fmt.Sprintf("Failed to stop container %s: %v", container, err), Danger)
+			fmt.Println(colorise(fmt.Sprintf("Failed to stop container %s: %v", container, err), Danger))
 		} else {
 			stoppedContainerCount++
 		}
 	}
 
-	message := fmt.Sprintf("Stopped %d container%s", stoppedContainerCount, pluralise(stoppedContainerCount))
-	printMessage(message)
+	fmt.Println(colorise(fmt.Sprintf("%s: Stopped %d container%s", colorise("STOPPING CONTAINERS", Success), stoppedContainerCount, pluralise(stoppedContainerCount))))
 }
 
 func removeContainers() {
@@ -227,24 +224,21 @@ func removeContainers() {
 
 	containerNames := strings.Fields(string(output))
 	if len(containerNames) == 0 {
-		printMessage("No CONTAINERS to REMOVE", Danger)
+		fmt.Println(colorise("No CONTAINERS to REMOVE", Danger))
 		return
 	}
 
-	printMessage("REMOVING CONTAINERS", Success)
 	removedContainerCount := 0
-
 	for _, container := range containerNames {
 		_, err = runCommand("docker", "rm", container)
 		if err != nil {
-			printMessage(fmt.Sprintf("Failed to remove container %s: %v", container, err), Danger)
+			fmt.Println(colorise(fmt.Sprintf("Failed to remove container %s: %v", container, err), Danger))
 		} else {
 			removedContainerCount++
 		}
 	}
 
-	message := fmt.Sprintf("Removed %d container%s", removedContainerCount, pluralise(removedContainerCount))
-	printMessage(message)
+	fmt.Println(colorise(fmt.Sprintf("%s: Removed %d container%s", colorise("REMOVING CONTAINERS", Success), removedContainerCount, pluralise(removedContainerCount))))
 }
 
 func removeVolumes() {
@@ -255,24 +249,21 @@ func removeVolumes() {
 
 	volumeIDs := strings.Fields(string(output))
 	if len(volumeIDs) == 0 {
-		printMessage("No VOLUMES to REMOVE", Danger)
+		fmt.Println(colorise("No VOLUMES to REMOVE", Danger))
 		return
 	}
 
-	printMessage("REMOVING VOLUMES", Success)
 	removedVolumeCount := 0
-
 	for _, volume := range volumeIDs {
 		_, err = runCommand("docker", "volume", "rm", volume)
 		if err != nil {
-			printMessage(fmt.Sprintf("Failed to remove volume %s: %v", volume, err), Danger)
+			fmt.Println(colorise(fmt.Sprintf("Failed to remove volume %s: %v", volume, err), Danger))
 		} else {
 			removedVolumeCount++
 		}
 	}
 
-	message := fmt.Sprintf("Removed %d volume%s", removedVolumeCount, pluralise(removedVolumeCount))
-	printMessage(message)
+	fmt.Println(colorise(fmt.Sprintf("%s: Removed %d volume%s", colorise("REMOVING VOLUMES", Success), removedVolumeCount, pluralise(removedVolumeCount))))
 }
 
 func removeImages() {
@@ -283,24 +274,21 @@ func removeImages() {
 
 	imageIDs := strings.Fields(string(output))
 	if len(imageIDs) == 0 {
-		printMessage("No IMAGES to REMOVE", Danger)
+		fmt.Println(colorise("No IMAGES to REMOVE", Danger))
 		return
 	}
 
-	printMessage("REMOVING IMAGES", Success)
 	removedImageCount := 0
-
 	for _, image := range imageIDs {
 		_, err = runCommand("docker", "rmi", image)
 		if err != nil {
-			printMessage(fmt.Sprintf("Failed to remove image %s: %v", image, err), Danger)
+			fmt.Println(colorise(fmt.Sprintf("Failed to remove image %s: %v", image, err), Danger))
 		} else {
 			removedImageCount++
 		}
 	}
 
-	message := fmt.Sprintf("Stopped %d image%s", removedImageCount, pluralise(removedImageCount))
-	printMessage(message)
+	fmt.Println(colorise(fmt.Sprintf("%s: Stopped %d image%s", colorise("REMOVING IMAGES", Success), removedImageCount, pluralise(removedImageCount))))
 }
 
 func pruneSystem() {
@@ -320,10 +308,9 @@ func pruneSystem() {
 	}
 
 	if reclaimedSpace == "Total reclaimed space: 0B" {
-		printMessage("NOTHING to PRUNE", Danger)
+		fmt.Println(colorise("NOTHING to PRUNE", Danger))
 		return
 	}
 
-	printMessage("Pruning SYSTEM", Success)
-	printMessage(reclaimedSpace)
+	fmt.Println(fmt.Sprintf("%s: %s", colorise("Pruning SYSTEM", Success), colorise(reclaimedSpace)))
 }
