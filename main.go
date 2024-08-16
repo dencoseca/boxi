@@ -67,6 +67,7 @@ func stopContainers() {
 
 	printMessage("STOPPING CONTAINERS", Success)
 	stoppedContainerCount := 0
+
 	for _, container := range containerNames {
 		_, err = runCommand("docker", "stop", container)
 		if err != nil {
@@ -75,6 +76,7 @@ func stopContainers() {
 			stoppedContainerCount++
 		}
 	}
+
 	message := fmt.Sprintf("Stopped %d container%s", stoppedContainerCount, pluralise(stoppedContainerCount))
 	printMessage(message)
 }
@@ -93,6 +95,7 @@ func removeContainers() {
 
 	printMessage("REMOVING CONTAINERS", Success)
 	removedContainerCount := 0
+
 	for _, container := range containerNames {
 		_, err = runCommand("docker", "rm", container)
 		if err != nil {
@@ -101,6 +104,7 @@ func removeContainers() {
 			removedContainerCount++
 		}
 	}
+
 	message := fmt.Sprintf("Removed %d container%s", removedContainerCount, pluralise(removedContainerCount))
 	printMessage(message)
 }
@@ -119,6 +123,7 @@ func removeVolumes() {
 
 	printMessage("REMOVING VOLUMES", Success)
 	removedVolumeCount := 0
+
 	for _, volume := range volumeNames {
 		_, err = runCommand("docker", "volume", "rm", volume)
 		if err != nil {
@@ -127,6 +132,7 @@ func removeVolumes() {
 			removedVolumeCount++
 		}
 	}
+
 	message := fmt.Sprintf("Removed %d volume%s", removedVolumeCount, pluralise(removedVolumeCount))
 	printMessage(message)
 }
@@ -145,6 +151,7 @@ func removeImages() {
 
 	printMessage("REMOVING IMAGES", Success)
 	removedImageCount := 0
+
 	for _, image := range imageIDs {
 		_, err = runCommand("docker", "rmi", image)
 		if err != nil {
@@ -153,6 +160,7 @@ func removeImages() {
 			removedImageCount++
 		}
 	}
+
 	message := fmt.Sprintf("Stopped %d image%s", removedImageCount, pluralise(removedImageCount))
 	printMessage(message)
 }
@@ -173,12 +181,13 @@ func pruneSystem() {
 		}
 	}
 
-	if reclaimedSpace != "Total reclaimed space: 0B" {
-		printMessage("Pruning SYSTEM", Success)
-		printMessage(reclaimedSpace)
-	} else {
+	if reclaimedSpace == "Total reclaimed space: 0B" {
 		printMessage("NOTHING to PRUNE", Danger)
+		return
 	}
+
+	printMessage("Pruning SYSTEM", Success)
+	printMessage(reclaimedSpace)
 }
 
 func main() {
