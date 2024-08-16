@@ -8,17 +8,56 @@ import (
 	"strings"
 )
 
-const usage = "Usage: boxi <command> [subCommand]"
+const mainUsage = `
+Usage: 	boxi <command> [subCommand]
+
+Clear up Docker resources
+
+Commands:
+  con, container, containers    Container commands
+  vol, volume, volumes          Volume commands
+  img, image, images            Image commands
+  wipe                          Clean up containers and volumes
+  purge                         Clean up containers, volumes, images, networks and the build cache
+
+Run 'boxi <command> --help' for more information.`
+
+const containerUsage = `
+Usage: 	boxi [con|container|containers] <command>
+
+Clear up Docker container resources
+
+Commands:
+  stop     Stop all running containers
+  rm       Remove all stopped containers
+  clean    Stop and remove all running containers`
+
+const volumeUsage = `
+Usage: 	boxi [vol|volume|volumes] <command>
+
+Clear up Docker volume resources
+
+Commands:
+  rm    Remove all dangling volumes`
+const imageUsage = `
+Usage: 	boxi [img|image|images] <command>
+
+Clear up Docker image resources
+
+Commands:
+  rm    Remove all dangling images`
 
 func main() {
 	if len(os.Args) < 1 {
-		fmt.Println(usage)
+		fmt.Println(mainUsage)
 		os.Exit(1)
 	}
 
 	mainCommand := os.Args[1]
 
 	switch mainCommand {
+	case "-h", "--help":
+		fmt.Println(mainUsage)
 	case "con", "container", "containers":
 		handleContainers()
 	case "vol", "volume", "volumes":
@@ -34,13 +73,15 @@ func main() {
 
 func handleContainers() {
 	if len(os.Args) < 3 {
-		fmt.Println(usage)
+		fmt.Println(mainUsage)
 		os.Exit(1)
 	}
 
 	subCommand := os.Args[2]
 
 	switch subCommand {
+	case "-h", "--help":
+		fmt.Println(containerUsage)
 	case "stop":
 		stopContainers()
 	case "rm":
@@ -49,41 +90,45 @@ func handleContainers() {
 		stopContainers()
 		removeContainers()
 	default:
-		fmt.Println(usage)
+		fmt.Println(mainUsage)
 		os.Exit(1)
 	}
 }
 
 func handleVolumes() {
 	if len(os.Args) < 3 {
-		fmt.Println(usage)
+		fmt.Println(mainUsage)
 		os.Exit(1)
 	}
 
 	subCommand := os.Args[2]
 
 	switch subCommand {
+	case "-h", "--help":
+		fmt.Println(volumeUsage)
 	case "rm":
 		removeVolumes()
 	default:
-		fmt.Println(usage)
+		fmt.Println(mainUsage)
 		os.Exit(1)
 	}
 }
 
 func handleImages() {
 	if len(os.Args) < 3 {
-		fmt.Println(usage)
+		fmt.Println(mainUsage)
 		os.Exit(1)
 	}
 
 	subCommand := os.Args[2]
 
 	switch subCommand {
+	case "-h", "--help":
+		fmt.Println(imageUsage)
 	case "rm":
 		removeImages()
 	default:
-		fmt.Println(usage)
+		fmt.Println(mainUsage)
 		os.Exit(1)
 	}
 }
