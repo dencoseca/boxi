@@ -190,17 +190,24 @@ func main() {
 		removeContainers()
 		removeVolumes()
 		removeImages()
-		printMessage("Pruning SYSTEM", Success)
-
-		cmd := exec.Command("docker", "system", "prune", "-f")
-		output, err := cmd.CombinedOutput()
-		if err != nil {
-			printMessage("Failed to prune system", Danger)
-		} else {
-			// Convert the output to a string and print it
-			printMessage(string(output))
-		}
+		pruneSystem()
 	default:
 		fmt.Println("Unknown command:", command)
+	}
+}
+
+func pruneSystem() {
+	printMessage("Pruning SYSTEM", Success)
+	output, err := runCommand("docker", "system", "prune", "-f")
+	if err != nil {
+		printMessage("Failed to prune system", Danger)
+	} else {
+		lines := strings.Split(string(output), "\n")
+		for _, line := range lines {
+			if strings.Contains(line, "Total reclaimed space") {
+				printMessage(line)
+				break
+			}
+		}
 	}
 }
