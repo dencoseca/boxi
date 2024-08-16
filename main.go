@@ -22,31 +22,6 @@ Commands:
 
 Run 'boxi <command> --help' for more information.`
 
-const containerUsage = `
-Usage: 	boxi [con|container|containers] <command>
-
-Clear up Docker container resources
-
-Commands:
-  stop     Stop all running containers
-  rm       Remove all stopped containers
-  clean    Stop and remove all running containers`
-
-const volumeUsage = `
-Usage: 	boxi [vol|volume|volumes] <command>
-
-Clear up Docker volume resources
-
-Commands:
-  rm    Remove all dangling volumes`
-const imageUsage = `
-Usage: 	boxi [img|image|images] <command>
-
-Clear up Docker image resources
-
-Commands:
-  rm    Remove all dangling images`
-
 func main() {
 	if len(os.Args) < 1 {
 		fmt.Println(mainUsage)
@@ -71,9 +46,19 @@ func main() {
 	}
 }
 
+const containerUsage = `
+Usage: 	boxi [con|container|containers] <command>
+
+Clear up Docker container resources
+
+Commands:
+  stop     Stop all running containers
+  rm       Remove all stopped containers
+  clean    Stop and remove all running containers`
+
 func handleContainers() {
 	if len(os.Args) < 3 {
-		fmt.Println(mainUsage)
+		fmt.Println(containerUsage)
 		os.Exit(1)
 	}
 
@@ -90,14 +75,22 @@ func handleContainers() {
 		stopContainers()
 		removeContainers()
 	default:
-		fmt.Println(mainUsage)
+		fmt.Println(containerUsage)
 		os.Exit(1)
 	}
 }
 
+const volumeUsage = `
+Usage: 	boxi [vol|volume|volumes] <command>
+
+Clear up Docker volume resources
+
+Commands:
+  rm    Remove all dangling volumes`
+
 func handleVolumes() {
 	if len(os.Args) < 3 {
-		fmt.Println(mainUsage)
+		fmt.Println(volumeUsage)
 		os.Exit(1)
 	}
 
@@ -109,14 +102,22 @@ func handleVolumes() {
 	case "rm":
 		removeVolumes()
 	default:
-		fmt.Println(mainUsage)
+		fmt.Println(volumeUsage)
 		os.Exit(1)
 	}
 }
 
+const imageUsage = `
+Usage: 	boxi [img|image|images] <command>
+
+Clear up Docker image resources
+
+Commands:
+  rm    Remove all dangling images`
+
 func handleImages() {
 	if len(os.Args) < 3 {
-		fmt.Println(mainUsage)
+		fmt.Println(imageUsage)
 		os.Exit(1)
 	}
 
@@ -128,7 +129,7 @@ func handleImages() {
 	case "rm":
 		removeImages()
 	default:
-		fmt.Println(mainUsage)
+		fmt.Println(imageUsage)
 		os.Exit(1)
 	}
 }
@@ -156,12 +157,10 @@ const (
 )
 
 func pluralise(count int) string {
-	return func(n int) string {
-		if n == 1 {
-			return ""
-		}
-		return "s"
-	}(count)
+	if count == 1 {
+		return ""
+	}
+	return "s"
 }
 
 func printMessage(message string, msgType ...MessageType) {
