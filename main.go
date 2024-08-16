@@ -60,7 +60,7 @@ func stopContainers() {
 	}
 
 	containerNames := strings.Fields(string(output))
-	if len(containerNames) <= 0 {
+	if len(containerNames) == 0 {
 		printMessage("No CONTAINERS to STOP", Danger)
 		return
 	}
@@ -86,7 +86,7 @@ func removeContainers() {
 	}
 
 	containerNames := strings.Fields(string(output))
-	if len(containerNames) <= 0 {
+	if len(containerNames) == 0 {
 		printMessage("No CONTAINERS to REMOVE", Danger)
 		return
 	}
@@ -112,7 +112,7 @@ func removeVolumes() {
 	}
 
 	volumeNames := strings.Fields(string(output))
-	if len(volumeNames) <= 0 {
+	if len(volumeNames) == 0 {
 		printMessage("No VOLUMES to REMOVE", Danger)
 		return
 	}
@@ -138,7 +138,7 @@ func removeImages() {
 	}
 
 	imageIDs := strings.Fields(string(output))
-	if len(imageIDs) <= 0 {
+	if len(imageIDs) == 0 {
 		printMessage("No IMAGES to REMOVE", Danger)
 		return
 	}
