@@ -147,12 +147,12 @@ func purge() {
 	pruneSystem()
 }
 
-type MessageType string
+type MessageType int
 
 const (
-	Danger  MessageType = "danger"
-	Success MessageType = "success"
-	Warning MessageType = "warning"
+	Danger MessageType = iota
+	Success
+	Warning
 )
 
 func pluralise(count int) string {
