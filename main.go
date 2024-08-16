@@ -253,8 +253,8 @@ func removeVolumes() {
 		log.Fatal(err)
 	}
 
-	volumeNames := strings.Fields(string(output))
-	if len(volumeNames) == 0 {
+	volumeIDs := strings.Fields(string(output))
+	if len(volumeIDs) == 0 {
 		printMessage("No VOLUMES to REMOVE", Danger)
 		return
 	}
@@ -262,7 +262,7 @@ func removeVolumes() {
 	printMessage("REMOVING VOLUMES", Success)
 	removedVolumeCount := 0
 
-	for _, volume := range volumeNames {
+	for _, volume := range volumeIDs {
 		_, err = runCommand("docker", "volume", "rm", volume)
 		if err != nil {
 			printMessage(fmt.Sprintf("Failed to remove volume %s: %v", volume, err), Danger)
