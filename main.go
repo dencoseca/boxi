@@ -8,6 +8,100 @@ import (
 	"strings"
 )
 
+const usage = "Usage: boxi <command> [subCommand]"
+
+func main() {
+	if len(os.Args) < 1 {
+		fmt.Println(usage)
+		os.Exit(1)
+	}
+
+	mainCommand := os.Args[1]
+
+	switch mainCommand {
+	case "con", "container", "containers":
+		handleContainers()
+	case "vol", "volume", "volumes":
+		handleVolumes()
+	case "img", "image", "images":
+		handleImages()
+	case "wipe":
+		wipe()
+	case "purge":
+		purge()
+	}
+}
+
+func handleContainers() {
+	if len(os.Args) < 3 {
+		fmt.Println(usage)
+		os.Exit(1)
+	}
+
+	subCommand := os.Args[2]
+
+	switch subCommand {
+	case "stop":
+		stopContainers()
+	case "rm":
+		removeContainers()
+	case "clean":
+		stopContainers()
+		removeContainers()
+	default:
+		fmt.Println(usage)
+		os.Exit(1)
+	}
+}
+
+func handleVolumes() {
+	if len(os.Args) < 3 {
+		fmt.Println(usage)
+		os.Exit(1)
+	}
+
+	subCommand := os.Args[2]
+
+	switch subCommand {
+	case "rm":
+		removeVolumes()
+	default:
+		fmt.Println(usage)
+		os.Exit(1)
+	}
+}
+
+func handleImages() {
+	if len(os.Args) < 3 {
+		fmt.Println(usage)
+		os.Exit(1)
+	}
+
+	subCommand := os.Args[2]
+
+	switch subCommand {
+	case "rm":
+		removeImages()
+	default:
+		fmt.Println(usage)
+		os.Exit(1)
+	}
+}
+
+func wipe() {
+	stopContainers()
+	removeContainers()
+	removeVolumes()
+}
+
+func purge() {
+	stopContainers()
+	removeContainers()
+	removeVolumes()
+	removeImages()
+	pruneSystem()
+}
+
 type MessageType string
 
 const (
@@ -188,41 +282,4 @@ func pruneSystem() {
 
 	printMessage("Pruning SYSTEM", Success)
 	printMessage(reclaimedSpace)
-}
-
-func main() {
-	usage := "Usage: boxi <command>"
-
-	if len(os.Args) < 2 {
-		fmt.Println(usage)
-		return
-	}
-
-	command := os.Args[1]
-
-	switch command {
-	case "sc":
-		stopContainers()
-	case "rc":
-		removeContainers()
-	case "rv":
-		removeVolumes()
-	case "ri":
-		removeImages()
-	case "cc":
-		stopContainers()
-		removeContainers()
-	case "ca":
-		stopContainers()
-		removeContainers()
-		removeVolumes()
-	case "purge":
-		stopContainers()
-		removeContainers()
-		removeVolumes()
-		removeImages()
-		pruneSystem()
-	default:
-		fmt.Println(usage)
-	}
 }
