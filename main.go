@@ -288,7 +288,7 @@ func removeImages() {
 		}
 	}
 
-	fmt.Println(colorise(fmt.Sprintf("%s: Stopped %d image%s", colorise("REMOVING IMAGES", Success), removedImageCount, pluralise(removedImageCount))))
+	fmt.Println(colorise(fmt.Sprintf("%s: Removed %d image%s", colorise("REMOVING IMAGES", Success), removedImageCount, pluralise(removedImageCount))))
 }
 
 func pruneSystem() {
