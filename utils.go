@@ -13,13 +13,6 @@ const (
 	Warning
 )
 
-func pluralise(count int) string {
-	if count == 1 {
-		return ""
-	}
-	return "s"
-}
-
 func colorise(message string, msgType ...MessageType) string {
 	reset := "\x1B[0m"
 	var style string
@@ -40,6 +33,13 @@ func colorise(message string, msgType ...MessageType) string {
 	}
 
 	return fmt.Sprintf("%s%s%s", style, message, reset)
+}
+
+func pluralise(count int) string {
+	if count == 1 {
+		return ""
+	}
+	return "s"
 }
 
 func runCommand(command string, args ...string) ([]byte, error) {
