@@ -4,23 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"os/exec"
 	"strings"
 )
-
-const mainUsage = `
-Usage: 	boxi <command> [subCommand]
-
-Clear up Docker resources
-
-Commands:
-  con, container, containers    Container commands
-  vol, volume, volumes          Volume commands
-  img, image, images            Image commands
-  wipe                          Clean up containers and volumes
-  purge                         Clean up containers, volumes, images, networks and the build cache
-
-Run 'boxi <command> --help' for more information.`
 
 func main() {
 	if len(os.Args) < 2 {
@@ -46,16 +31,6 @@ func main() {
 	}
 }
 
-const containerUsage = `
-Usage: 	boxi [con|container|containers] <command>
-
-Clear up Docker container resources
-
-Commands:
-  stop     Stop all running containers
-  rm       Remove all stopped containers
-  clean    Stop and remove all running containers`
-
 func handleContainers() {
 	if len(os.Args) < 3 {
 		fmt.Println(containerUsage)
@@ -80,14 +55,6 @@ func handleContainers() {
 	}
 }
 
-const volumeUsage = `
-Usage: 	boxi [vol|volume|volumes] <command>
-
-Clear up Docker volume resources
-
-Commands:
-  rm    Remove all dangling volumes`
-
 func handleVolumes() {
 	if len(os.Args) < 3 {
 		fmt.Println(volumeUsage)
@@ -106,14 +73,6 @@ func handleVolumes() {
 		os.Exit(1)
 	}
 }
-
-const imageUsage = `
-Usage: 	boxi [img|image|images] <command>
-
-Clear up Docker image resources
-
-Commands:
-  rm    Remove all dangling images`
 
 func handleImages() {
 	if len(os.Args) < 3 {
@@ -146,49 +105,6 @@ func purge() {
 	removeVolumes()
 	removeImages()
 	pruneSystem()
-}
-
-type MessageType int
-
-const (
-	Danger MessageType = iota
-	Success
-	Warning
-)
-
-func pluralise(count int) string {
-	if count == 1 {
-		return ""
-	}
-	return "s"
-}
-
-func colorise(message string, msgType ...MessageType) string {
-	reset := "\x1B[0m"
-	var style string
-
-	if len(msgType) > 0 {
-		switch msgType[0] {
-		case Danger:
-			style = "\x1B[1;31m"
-		case Success:
-			style = "\x1B[1;32m"
-		case Warning:
-			style = "\x1B[1;33m"
-		default:
-			style = reset
-		}
-	} else {
-		style = reset
-	}
-
-	return fmt.Sprintf("%s%s%s", style, message, reset)
-}
-
-func runCommand(command string, args ...string) ([]byte, error) {
-	cmd := exec.Command(command, args...)
-	output, err := cmd.CombinedOutput()
-	return output, err
 }
 
 func stopContainers() {
