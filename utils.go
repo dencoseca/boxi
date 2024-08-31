@@ -39,11 +39,13 @@ func pluralise(count int) string {
 	if count == 1 {
 		return ""
 	}
+
 	return "s"
 }
 
-func runCommand(command string, args ...string) ([]byte, error) {
+func runCommand(command string, args ...string) (string, error) {
 	cmd := exec.Command(command, args...)
 	output, err := cmd.CombinedOutput()
-	return output, err
+
+	return string(output), err
 }

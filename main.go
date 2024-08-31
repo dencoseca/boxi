@@ -110,10 +110,10 @@ func purge() {
 func stopContainers() {
 	output, err := runCommand("docker", "ps", "-a", "--format", "{{.Names}}")
 	if err != nil {
-		log.Fatal(string(output))
+		log.Fatal(output)
 	}
 
-	containerNames := strings.Fields(string(output))
+	containerNames := strings.Fields(output)
 	if len(containerNames) == 0 {
 		fmt.Println(colorise("No CONTAINERS to STOP", Warning))
 		return
@@ -140,10 +140,10 @@ func stopContainers() {
 func removeContainers() {
 	output, err := runCommand("docker", "ps", "-a", "--format", "{{.Names}}")
 	if err != nil {
-		log.Fatal(string(output))
+		log.Fatal(output)
 	}
 
-	containerNames := strings.Fields(string(output))
+	containerNames := strings.Fields(output)
 	if len(containerNames) == 0 {
 		fmt.Println(colorise("No CONTAINERS to REMOVE", Warning))
 		return
@@ -170,10 +170,10 @@ func removeContainers() {
 func removeVolumes() {
 	output, err := runCommand("docker", "volume", "ls", "-q")
 	if err != nil {
-		log.Fatal(string(output))
+		log.Fatal(output)
 	}
 
-	volumeIDs := strings.Fields(string(output))
+	volumeIDs := strings.Fields(output)
 	if len(volumeIDs) == 0 {
 		fmt.Println(colorise("No VOLUMES to REMOVE", Warning))
 		return
@@ -200,10 +200,10 @@ func removeVolumes() {
 func removeImages() {
 	output, err := runCommand("docker", "images", "-q")
 	if err != nil {
-		log.Fatal(string(output))
+		log.Fatal(output)
 	}
 
-	imageIDs := strings.Fields(string(output))
+	imageIDs := strings.Fields(output)
 	if len(imageIDs) == 0 {
 		fmt.Println(colorise("No IMAGES to REMOVE", Warning))
 		return
@@ -230,10 +230,10 @@ func removeImages() {
 func pruneSystem() {
 	output, err := runCommand("docker", "system", "prune", "-f")
 	if err != nil {
-		log.Fatal(string(output))
+		log.Fatal(output)
 	}
 
-	lines := strings.Split(string(output), "\n")
+	lines := strings.Split(output, "\n")
 	var reclaimedSpace string
 
 	for _, line := range lines {
