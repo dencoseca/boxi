@@ -1,3 +1,7 @@
+// Package main provides a command-line tool for managing Docker containers,
+// volumes, and images. The tool supports operations such as stopping, removing,
+// and cleaning containers, removing volumes and images, and performing system
+// cleanup actions like wiping and purging.
 package main
 
 import (
@@ -7,6 +11,10 @@ import (
 	"strings"
 )
 
+// main is the entry point of the application. It processes command-line
+// arguments and invokes corresponding handlers. Supported commands include
+// container, volume, image operations, and system cleanup actions like wipe and
+// purge.
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println(mainUsage)
@@ -31,6 +39,8 @@ func main() {
 	}
 }
 
+// handleContainers processes container-related commands such as stop, rm, and
+// clean, based on user input.
 func handleContainers() {
 	if len(os.Args) < 3 {
 		fmt.Println(containerUsage)
@@ -55,6 +65,8 @@ func handleContainers() {
 	}
 }
 
+// handleVolumes processes volume-related commands such as rm, based on user
+// input.
 func handleVolumes() {
 	if len(os.Args) < 3 {
 		fmt.Println(volumeUsage)
@@ -74,6 +86,7 @@ func handleVolumes() {
 	}
 }
 
+// handleImages processes image-related commands such as rm, based on user input.
 func handleImages() {
 	if len(os.Args) < 3 {
 		fmt.Println(imageUsage)
@@ -93,12 +106,16 @@ func handleImages() {
 	}
 }
 
+// wipe stops and removes all Docker containers and removes all Docker volumes.
 func wipe() {
 	stopContainers()
 	removeContainers()
 	removeVolumes()
 }
 
+// purge stops and removes all Docker containers, removes all Docker volumes,
+// removes all Docker images, and prunes the Docker system including networks and
+// the build cache.
 func purge() {
 	stopContainers()
 	removeContainers()
@@ -107,6 +124,8 @@ func purge() {
 	pruneSystem()
 }
 
+// stopContainers stops all running Docker containers and logs the result for
+// each container stopped, or any errors encountered.
 func stopContainers() {
 	output, err := runCommand("docker", "ps", "-a", "--format", "{{.Names}}")
 	if err != nil {
@@ -137,6 +156,8 @@ func stopContainers() {
 	fmt.Println(colorise(fmt.Sprintf("%s: Stopped %d container%s", colorise("STOPPING CONTAINERS", Success), stoppedContainerCount, pluralise(stoppedContainerCount))))
 }
 
+// removeContainers removes all stopped Docker containers and logs the result for
+// each container removed or any errors encountered.
 func removeContainers() {
 	output, err := runCommand("docker", "ps", "-a", "--format", "{{.Names}}")
 	if err != nil {
@@ -167,6 +188,8 @@ func removeContainers() {
 	fmt.Println(colorise(fmt.Sprintf("%s: Removed %d container%s", colorise("REMOVING CONTAINERS", Success), removedContainerCount, pluralise(removedContainerCount))))
 }
 
+// removeVolumes removes all dangling Docker volumes and logs the result for each
+// volume removed or any errors encountered.
 func removeVolumes() {
 	output, err := runCommand("docker", "volume", "ls", "-q")
 	if err != nil {
@@ -197,6 +220,8 @@ func removeVolumes() {
 	fmt.Println(colorise(fmt.Sprintf("%s: Removed %d volume%s", colorise("REMOVING VOLUMES", Success), removedVolumeCount, pluralise(removedVolumeCount))))
 }
 
+// removeImages removes all Docker images, logging the result for each image
+// removed or any errors encountered.
 func removeImages() {
 	output, err := runCommand("docker", "images", "-q")
 	if err != nil {
@@ -227,6 +252,8 @@ func removeImages() {
 	fmt.Println(colorise(fmt.Sprintf("%s: Removed %d image%s", colorise("REMOVING IMAGES", Success), removedImageCount, pluralise(removedImageCount))))
 }
 
+// pruneSystem prunes the Docker system, logging the total space reclaimed or a
+// warning if nothing was pruned.
 func pruneSystem() {
 	output, err := runCommand("docker", "system", "prune", "-f")
 	if err != nil {

@@ -5,6 +5,7 @@ import (
 	"os/exec"
 )
 
+// MessageType represents the type or category of a message in the system.
 type MessageType int
 
 const (
@@ -13,6 +14,8 @@ const (
 	Warning
 )
 
+// colorise applies a color style to a given message string based on the provided
+// MessageType. If no MessageType is provided, it uses the default style.
 func colorise(message string, msgType ...MessageType) string {
 	reset := "\x1B[0m"
 	var style string
@@ -35,6 +38,8 @@ func colorise(message string, msgType ...MessageType) string {
 	return fmt.Sprintf("%s%s%s", style, message, reset)
 }
 
+// pluralise returns the string "s" if the count is not equal to 1, otherwise an
+// empty string.
 func pluralise(count int) string {
 	if count == 1 {
 		return ""
@@ -43,6 +48,8 @@ func pluralise(count int) string {
 	return "s"
 }
 
+// runCommand executes a command with the given arguments and returns the
+// combined output and error status.
 func runCommand(command string, args ...string) (string, error) {
 	cmd := exec.Command(command, args...)
 	output, err := cmd.CombinedOutput()
