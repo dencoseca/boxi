@@ -123,7 +123,7 @@ func purge() {
 // stopContainers stops all running Docker containers and logs the result for
 // each container stopped, or any errors encountered.
 func stopContainers() {
-	output, err := runCommand("docker", "ps", "-a", "--format", "{{.Names}}")
+	output, err := runCommand("docker", "ps", "--format", "{{.Names}}")
 	if err != nil {
 		log.Fatal(output)
 	}
