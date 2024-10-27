@@ -96,6 +96,8 @@ func handleImages() {
 		fmt.Println(imageUsage)
 	case "rm":
 		removeImages()
+	case "rmf":
+		removeImages(true)
 	default:
 		fmt.Println(imageUsage)
 		os.Exit(1)
@@ -218,7 +220,13 @@ func removeVolumes() {
 
 // removeImages removes all Docker images, logging the result for each image
 // removed or any errors encountered.
-func removeImages() {
+
+func removeImages(force ...bool) {
+	forceFlag := false
+	if len(force) > 0 {
+		forceFlag = true
+	}
+
 	output, err := runCommand("docker", "images", "-q")
 	if err != nil {
 		log.Fatal(output)
@@ -232,7 +240,12 @@ func removeImages() {
 
 	removedImageCount := 0
 	for _, image := range imageIDs {
-		output, err = runCommand("docker", "rmi", image)
+		args := []string{"rmi", image}
+		if forceFlag {
+			args = append(args, "-f")
+		}
+
+		output, err = runCommand("docker", args...)
 		if err != nil {
 			fmt.Println(colorise(fmt.Sprintf("Failed to remove image %s: %s", image, output), Danger))
 		} else {

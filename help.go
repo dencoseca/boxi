@@ -38,4 +38,5 @@ Usage: 	boxi [img|image|images] <command>
 Clear up Docker image resources
 
 Commands:
-  rm    Remove all dangling images`
+  rm    Remove all dangling images
+  rmf   Force remove all dangling images`
