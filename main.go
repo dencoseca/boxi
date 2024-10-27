@@ -118,7 +118,7 @@ func purge() {
 	stopContainers()
 	removeContainers()
 	removeVolumes()
-	removeImages()
+	removeImages(true)
 	pruneSystem()
 }
 
