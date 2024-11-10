@@ -20,7 +20,7 @@ func main() {
 	mainCommand := os.Args[1]
 
 	switch mainCommand {
-	case "-h", "--help":
+	case "-h", "help", "--help":
 		fmt.Println(mainUsage)
 	case "con", "container", "containers":
 		handleContainers()
@@ -32,6 +32,9 @@ func main() {
 		wipe()
 	case "purge":
 		purge()
+	default:
+		fmt.Println(mainUsage)
+		os.Exit(1)
 	}
 }
 
@@ -46,7 +49,7 @@ func handleContainers() {
 	subCommand := os.Args[2]
 
 	switch subCommand {
-	case "-h", "--help":
+	case "-h", "help", "--help":
 		fmt.Println(containerUsage)
 	case "stop":
 		stopContainers()
@@ -72,7 +75,7 @@ func handleVolumes() {
 	subCommand := os.Args[2]
 
 	switch subCommand {
-	case "-h", "--help":
+	case "-h", "help", "--help":
 		fmt.Println(volumeUsage)
 	case "rm":
 		removeVolumes()
@@ -92,7 +95,7 @@ func handleImages() {
 	subCommand := os.Args[2]
 
 	switch subCommand {
-	case "-h", "--help":
+	case "-h", "help", "--help":
 		fmt.Println(imageUsage)
 	case "rm":
 		removeImages()
