@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-const MainUsage = `
+var MainUsage = `
 Usage: 	boxi <command> [subCommand]
 
 Clear up Docker resources
@@ -19,7 +19,7 @@ Commands:
 
 Run 'boxi <command> --help' for more information.`
 
-const ContainerUsage = `
+var ContainerUsage = `
 Usage: 	boxi [con|container|containers] <command>
 
 Clear up Docker container resources
@@ -29,7 +29,7 @@ Commands:
   rm       Remove all stopped containers
   clean    Stop and remove all running containers`
 
-const VolumeUsage = `
+var VolumeUsage = `
 Usage: 	boxi [vol|volume|volumes] <command>
 
 Clear up Docker volume resources
@@ -37,7 +37,7 @@ Clear up Docker volume resources
 Commands:
   rm    Remove all dangling volumes`
 
-const ImageUsage = `
+var ImageUsage = `
 Usage: 	boxi [img|image|images] <command>
 
 Clear up Docker image resources
