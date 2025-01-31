@@ -15,14 +15,14 @@ import (
 // purge.
 func main() {
 	if len(os.Args) < 2 {
-		help.PrintUsageAndExit(help.Main, 1)
+		help.PrintHelpAndExit(help.Main, 1)
 	}
 
 	mainCommand := os.Args[1]
 
 	switch mainCommand {
 	case "-h", "help", "--help":
-		help.PrintUsageAndExit(help.Main)
+		help.PrintHelpAndExit(help.Main)
 	case "con", "container", "containers":
 		handleContainers()
 	case "vol", "volume", "volumes":
@@ -34,7 +34,7 @@ func main() {
 	case "purge":
 		purge()
 	default:
-		help.PrintUsageAndExit(help.Main, 1)
+		help.PrintHelpAndExit(help.Main, 1)
 	}
 }
 
@@ -42,14 +42,14 @@ func main() {
 // clean, based on user input.
 func handleContainers() {
 	if len(os.Args) < 3 {
-		help.PrintUsageAndExit(help.Container, 1)
+		help.PrintHelpAndExit(help.Container, 1)
 	}
 
 	subCommand := os.Args[2]
 
 	switch subCommand {
 	case "-h", "help", "--help":
-		help.PrintUsageAndExit(help.Container)
+		help.PrintHelpAndExit(help.Container)
 	case "stop":
 		stopContainers()
 	case "rm":
@@ -58,7 +58,7 @@ func handleContainers() {
 		stopContainers()
 		removeContainers()
 	default:
-		help.PrintUsageAndExit(help.Container, 1)
+		help.PrintHelpAndExit(help.Container, 1)
 	}
 }
 
@@ -66,38 +66,38 @@ func handleContainers() {
 // input.
 func handleVolumes() {
 	if len(os.Args) < 3 {
-		help.PrintUsageAndExit(help.Volume, 1)
+		help.PrintHelpAndExit(help.Volume, 1)
 	}
 
 	subCommand := os.Args[2]
 
 	switch subCommand {
 	case "-h", "help", "--help":
-		help.PrintUsageAndExit(help.Volume)
+		help.PrintHelpAndExit(help.Volume)
 	case "rm":
 		removeVolumes()
 	default:
-		help.PrintUsageAndExit(help.Volume, 1)
+		help.PrintHelpAndExit(help.Volume, 1)
 	}
 }
 
 // handleImages processes image-related commands such as rm, based on user input.
 func handleImages() {
 	if len(os.Args) < 3 {
-		help.PrintUsageAndExit(help.Image, 1)
+		help.PrintHelpAndExit(help.Image, 1)
 	}
 
 	subCommand := os.Args[2]
 
 	switch subCommand {
 	case "-h", "help", "--help":
-		help.PrintUsageAndExit(help.Image)
+		help.PrintHelpAndExit(help.Image)
 	case "rm":
 		removeImages()
 	case "rmf":
 		removeImages(true)
 	default:
-		help.PrintUsageAndExit(help.Image, 1)
+		help.PrintHelpAndExit(help.Image, 1)
 	}
 }
 
