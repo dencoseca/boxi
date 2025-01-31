@@ -55,6 +55,8 @@ const (
 	Image
 )
 
+// PrintUsageAndExit prints the usage instructions for the specified command and
+// exits the program with the given exit code.
 func PrintUsageAndExit(usage Usage, code ...int) {
 	exitCode := 0
 	if len(code) > 0 {
