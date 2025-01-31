@@ -9,10 +9,6 @@ import (
 	"strings"
 )
 
-// main is the entry point of the application. It processes command-line
-// arguments and invokes corresponding handlers. Supported commands include
-// container, volume, image operations, and system cleanup actions like wipe and
-// purge.
 func main() {
 	if len(os.Args) < 2 {
 		help.PrintHelpAndExit(help.Main, 1)
