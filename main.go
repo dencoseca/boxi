@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/dencoseca/boxi/help"
 	"github.com/dencoseca/boxi/styles"
 	"log"
 	"os"
+	"os/exec"
 	"strings"
 )
 
@@ -14,15 +16,14 @@ import (
 // purge.
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println(mainUsage)
-		os.Exit(1)
+		help.PrintUsageAndExit(help.Main, 1)
 	}
 
 	mainCommand := os.Args[1]
 
 	switch mainCommand {
 	case "-h", "help", "--help":
-		fmt.Println(mainUsage)
+		help.PrintUsageAndExit(help.Main)
 	case "con", "container", "containers":
 		handleContainers()
 	case "vol", "volume", "volumes":
@@ -34,8 +35,7 @@ func main() {
 	case "purge":
 		purge()
 	default:
-		fmt.Println(mainUsage)
-		os.Exit(1)
+		help.PrintUsageAndExit(help.Main, 1)
 	}
 }
 
@@ -43,15 +43,14 @@ func main() {
 // clean, based on user input.
 func handleContainers() {
 	if len(os.Args) < 3 {
-		fmt.Println(containerUsage)
-		os.Exit(1)
+		help.PrintUsageAndExit(help.Container, 1)
 	}
 
 	subCommand := os.Args[2]
 
 	switch subCommand {
 	case "-h", "help", "--help":
-		fmt.Println(containerUsage)
+		help.PrintUsageAndExit(help.Container)
 	case "stop":
 		stopContainers()
 	case "rm":
@@ -60,8 +59,7 @@ func handleContainers() {
 		stopContainers()
 		removeContainers()
 	default:
-		fmt.Println(containerUsage)
-		os.Exit(1)
+		help.PrintUsageAndExit(help.Container, 1)
 	}
 }
 
@@ -69,42 +67,38 @@ func handleContainers() {
 // input.
 func handleVolumes() {
 	if len(os.Args) < 3 {
-		fmt.Println(volumeUsage)
-		os.Exit(1)
+		help.PrintUsageAndExit(help.Volume, 1)
 	}
 
 	subCommand := os.Args[2]
 
 	switch subCommand {
 	case "-h", "help", "--help":
-		fmt.Println(volumeUsage)
+		help.PrintUsageAndExit(help.Volume)
 	case "rm":
 		removeVolumes()
 	default:
-		fmt.Println(volumeUsage)
-		os.Exit(1)
+		help.PrintUsageAndExit(help.Volume, 1)
 	}
 }
 
 // handleImages processes image-related commands such as rm, based on user input.
 func handleImages() {
 	if len(os.Args) < 3 {
-		fmt.Println(imageUsage)
-		os.Exit(1)
+		help.PrintUsageAndExit(help.Image, 1)
 	}
 
 	subCommand := os.Args[2]
 
 	switch subCommand {
 	case "-h", "help", "--help":
-		fmt.Println(imageUsage)
+		help.PrintUsageAndExit(help.Image)
 	case "rm":
 		removeImages()
 	case "rmf":
 		removeImages(true)
 	default:
-		fmt.Println(imageUsage)
-		os.Exit(1)
+		help.PrintUsageAndExit(help.Image, 1)
 	}
 }
 
@@ -288,4 +282,23 @@ func pruneSystem() {
 	}
 
 	styles.Green("PRUNED %s", reclaimedSpace)
+}
+
+// pluralise returns the string "s" if the count is not equal to 1, otherwise an
+// empty string.
+func pluralise(count int) string {
+	if count == 1 {
+		return ""
+	}
+
+	return "s"
+}
+
+// runCommand executes a command with the given arguments and returns the
+// combined output and error status.
+func runCommand(command string, args ...string) (string, error) {
+	cmd := exec.Command(command, args...)
+	output, err := cmd.CombinedOutput()
+
+	return string(output), err
 }
