@@ -63,18 +63,18 @@ func PrintHelpAndExit(usage Usage, code ...int) {
 		exitCode = code[0]
 	}
 
+	output := ""
 	switch usage {
 	case Main:
-		fmt.Println(MainUsage)
-		os.Exit(exitCode)
+		output = MainUsage
 	case Container:
-		fmt.Println(ContainerUsage)
-		os.Exit(exitCode)
+		output = ContainerUsage
 	case Volume:
-		fmt.Println(VolumeUsage)
-		os.Exit(exitCode)
+		output = VolumeUsage
 	case Image:
-		fmt.Println(ImageUsage)
-		os.Exit(exitCode)
+		output = ImageUsage
 	}
+
+	fmt.Println(output)
+	os.Exit(exitCode)
 }
