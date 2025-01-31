@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/dencoseca/boxi/help"
 	"github.com/dencoseca/boxi/styles"
 	"log"
