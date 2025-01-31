@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/dencoseca/boxi/styles"
 	"log"
 	"os"
 	"strings"
@@ -135,7 +136,7 @@ func stopContainers() {
 
 	containerNames := strings.Fields(output)
 	if len(containerNames) == 0 {
-		fmt.Println(colorise("No CONTAINERS to STOP", Warning))
+		styles.Yellow("No CONTAINERS to STOP")
 		return
 	}
 
@@ -143,18 +144,18 @@ func stopContainers() {
 	for _, container := range containerNames {
 		output, err = runCommand("docker", "stop", container)
 		if err != nil {
-			fmt.Println(colorise(fmt.Sprintf("Failed to stop container %s: %s", container, output), Danger))
+			styles.Red("Failed to stop container %s: %s", container, output)
 		} else {
 			stoppedContainerCount++
 		}
 	}
 
 	if stoppedContainerCount == 0 {
-		fmt.Println(colorise("No CONTAINERS were STOPPED", Danger))
+		styles.Red("No CONTAINERS were STOPPED")
 		return
 	}
 
-	fmt.Println(colorise(fmt.Sprintf("%s: Stopped %d container%s", colorise("STOPPING CONTAINERS", Success), stoppedContainerCount, pluralise(stoppedContainerCount))))
+	styles.Green("%s CONTAINER%s STOPPED", stoppedContainerCount, strings.ToUpper(pluralise(stoppedContainerCount)))
 }
 
 // removeContainers removes all stopped Docker containers and logs the result for
@@ -167,7 +168,7 @@ func removeContainers() {
 
 	containerNames := strings.Fields(output)
 	if len(containerNames) == 0 {
-		fmt.Println(colorise("No CONTAINERS to REMOVE", Warning))
+		styles.Yellow("No CONTAINERS to REMOVE")
 		return
 	}
 
@@ -175,18 +176,18 @@ func removeContainers() {
 	for _, container := range containerNames {
 		output, err = runCommand("docker", "rm", container)
 		if err != nil {
-			fmt.Println(colorise(fmt.Sprintf("Failed to remove container %s: %s", container, output), Danger))
+			styles.Red("Failed to remove container %s: %s", container, output)
 		} else {
 			removedContainerCount++
 		}
 	}
 
 	if removedContainerCount == 0 {
-		fmt.Println(colorise("No CONTAINERS were REMOVED", Danger))
+		styles.Red("No CONTAINERS were REMOVED")
 		return
 	}
 
-	fmt.Println(colorise(fmt.Sprintf("%s: Removed %d container%s", colorise("REMOVING CONTAINERS", Success), removedContainerCount, pluralise(removedContainerCount))))
+	styles.Green("%s CONTAINER%s REMOVED", removedContainerCount, strings.ToUpper(pluralise(removedContainerCount)))
 }
 
 // removeVolumes removes all dangling Docker volumes and logs the result for each
@@ -199,7 +200,7 @@ func removeVolumes() {
 
 	volumeIDs := strings.Fields(output)
 	if len(volumeIDs) == 0 {
-		fmt.Println(colorise("No VOLUMES to REMOVE", Warning))
+		styles.Yellow("No VOLUMES to REMOVE")
 		return
 	}
 
@@ -207,23 +208,22 @@ func removeVolumes() {
 	for _, volume := range volumeIDs {
 		output, err = runCommand("docker", "volume", "rm", volume)
 		if err != nil {
-			fmt.Println(colorise(fmt.Sprintf("Failed to remove volume %s: %s", volume, output), Danger))
+			styles.Red("Failed to remove volume %s: %s", volume, output)
 		} else {
 			removedVolumeCount++
 		}
 	}
 
 	if removedVolumeCount == 0 {
-		fmt.Println(colorise("No VOLUMES were REMOVED", Danger))
+		styles.Yellow("No VOLUMES were REMOVED")
 		return
 	}
 
-	fmt.Println(colorise(fmt.Sprintf("%s: Removed %d volume%s", colorise("REMOVING VOLUMES", Success), removedVolumeCount, pluralise(removedVolumeCount))))
+	styles.Green("%s VOLUME%s REMOVED", removedVolumeCount, strings.ToUpper(pluralise(removedVolumeCount)))
 }
 
 // removeImages removes all Docker images, logging the result for each image
 // removed or any errors encountered.
-
 func removeImages(force ...bool) {
 	forceFlag := false
 	if len(force) > 0 {
@@ -237,7 +237,7 @@ func removeImages(force ...bool) {
 
 	imageIDs := strings.Fields(output)
 	if len(imageIDs) == 0 {
-		fmt.Println(colorise("No IMAGES to REMOVE", Warning))
+		styles.Yellow("No IMAGES to REMOVE")
 		return
 	}
 
@@ -250,18 +250,18 @@ func removeImages(force ...bool) {
 
 		output, err = runCommand("docker", args...)
 		if err != nil {
-			fmt.Println(colorise(fmt.Sprintf("Failed to remove image %s: %s", image, output), Danger))
+			styles.Red("Failed to remove image %s: %s", image, output)
 		} else {
 			removedImageCount++
 		}
 	}
 
 	if removedImageCount == 0 {
-		fmt.Println(colorise("No IMAGES were REMOVED", Danger))
+		styles.Red("No IMAGES were REMOVED")
 		return
 	}
 
-	fmt.Println(colorise(fmt.Sprintf("%s: Removed %d image%s", colorise("REMOVING IMAGES", Success), removedImageCount, pluralise(removedImageCount))))
+	styles.Green("%s IMAGE%s REMOVED", removedImageCount, strings.ToUpper(pluralise(removedImageCount)))
 }
 
 // pruneSystem prunes the Docker system, logging the total space reclaimed or a
@@ -283,9 +283,9 @@ func pruneSystem() {
 	}
 
 	if reclaimedSpace == "Total reclaimed space: 0B" {
-		fmt.Println(colorise("NOTHING to PRUNE", Warning))
+		styles.Yellow("NOTHING to PRUNE")
 		return
 	}
 
-	fmt.Println(fmt.Sprintf("%s: %s", colorise("Pruning SYSTEM", Success), colorise(reclaimedSpace)))
+	styles.Green("PRUNED %s", reclaimedSpace)
 }
