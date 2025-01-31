@@ -148,7 +148,7 @@ func stopContainers() {
 		return
 	}
 
-	styles.Green("%s CONTAINER%s STOPPED", stoppedContainerCount, strings.ToUpper(pluralise(stoppedContainerCount)))
+	styles.Green("%d CONTAINER%s STOPPED", stoppedContainerCount, strings.ToUpper(pluralise(stoppedContainerCount)))
 }
 
 // removeContainers removes all stopped Docker containers and logs the result for
@@ -180,7 +180,7 @@ func removeContainers() {
 		return
 	}
 
-	styles.Green("%s CONTAINER%s REMOVED", removedContainerCount, strings.ToUpper(pluralise(removedContainerCount)))
+	styles.Green("%d CONTAINER%s REMOVED", removedContainerCount, strings.ToUpper(pluralise(removedContainerCount)))
 }
 
 // removeVolumes removes all dangling Docker volumes and logs the result for each
@@ -212,7 +212,7 @@ func removeVolumes() {
 		return
 	}
 
-	styles.Green("%s VOLUME%s REMOVED", removedVolumeCount, strings.ToUpper(pluralise(removedVolumeCount)))
+	styles.Green("%d VOLUME%s REMOVED", removedVolumeCount, strings.ToUpper(pluralise(removedVolumeCount)))
 }
 
 // removeImages removes all Docker images, logging the result for each image
@@ -254,7 +254,7 @@ func removeImages(force ...bool) {
 		return
 	}
 
-	styles.Green("%s IMAGE%s REMOVED", removedImageCount, strings.ToUpper(pluralise(removedImageCount)))
+	styles.Green("%d IMAGE%s REMOVED", removedImageCount, strings.ToUpper(pluralise(removedImageCount)))
 }
 
 // pruneSystem prunes the Docker system, logging the total space reclaimed or a
