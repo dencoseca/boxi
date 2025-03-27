@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/dencoseca/boxi/help"
 	"github.com/dencoseca/boxi/styles"
-	"log"
 	"os"
 	"os/exec"
 	"strings"
