@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/dencoseca/boxi/help"
 	"github.com/dencoseca/boxi/styles"
 	"log"
@@ -120,7 +121,8 @@ func purge() {
 func stopContainers() {
 	output, err := runCommand("docker", "ps", "--format", "{{.Names}}")
 	if err != nil {
-		log.Fatal(output)
+		fmt.Println(output)
+		os.Exit(1)
 	}
 
 	containerNames := strings.Fields(output)
@@ -152,7 +154,8 @@ func stopContainers() {
 func removeContainers() {
 	output, err := runCommand("docker", "ps", "-a", "--format", "{{.Names}}")
 	if err != nil {
-		log.Fatal(output)
+		fmt.Println(output)
+		os.Exit(1)
 	}
 
 	containerNames := strings.Fields(output)
@@ -184,7 +187,8 @@ func removeContainers() {
 func removeVolumes() {
 	output, err := runCommand("docker", "volume", "ls", "-q")
 	if err != nil {
-		log.Fatal(output)
+		fmt.Println(output)
+		os.Exit(1)
 	}
 
 	volumeIDs := strings.Fields(output)
@@ -221,7 +225,8 @@ func removeImages(force ...bool) {
 
 	output, err := runCommand("docker", "images", "-q")
 	if err != nil {
-		log.Fatal(output)
+		fmt.Println(output)
+		os.Exit(1)
 	}
 
 	imageIDs := strings.Fields(output)
@@ -258,7 +263,8 @@ func removeImages(force ...bool) {
 func pruneSystem() {
 	output, err := runCommand("docker", "system", "prune", "-f")
 	if err != nil {
-		log.Fatal(output)
+		fmt.Println(output)
+		os.Exit(1)
 	}
 
 	lines := strings.Split(output, "\n")
