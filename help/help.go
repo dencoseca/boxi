@@ -14,6 +14,7 @@ Commands:
   con, container, containers    Container commands
   vol, volume, volumes          Volume commands
   img, image, images            Image commands
+  info                          Display Docker system information
   wipe                          Clean up containers and volumes
   purge                         Clean up containers, volumes, images, networks and the build cache
 
