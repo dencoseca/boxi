@@ -338,13 +338,16 @@ func showInfo() {
 			totalNonZero := totalIndex < len(fields) && fields[totalIndex] != "0" && fields[totalIndex] != "0B"
 			activeNonZero := activeIndex < len(fields) && fields[activeIndex] != "0" && fields[activeIndex] != "0B"
 
+			// Escape percentage signs to avoid fmt.Sprintf issues
+			escapedLine := strings.ReplaceAll(line, "%", "%%")
+
 			// Apply color based on TOTAL and ACTIVE values
 			if totalNonZero && activeNonZero {
 				// Both TOTAL and ACTIVE are non-zero - green
-				styles.Green(line)
+				styles.Green(escapedLine)
 			} else if totalNonZero && !activeNonZero {
 				// TOTAL is non-zero but ACTIVE is zero - yellow
-				styles.Yellow(line)
+				styles.Yellow(escapedLine)
 			} else {
 				// Both TOTAL and ACTIVE are zero - no color
 				fmt.Println(line)
