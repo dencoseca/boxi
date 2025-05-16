@@ -345,7 +345,7 @@ func showInfo() {
 			if totalNonZero && activeNonZero {
 				// Both TOTAL and ACTIVE are non-zero - green
 				styles.Green(escapedLine)
-			} else if totalNonZero && !activeNonZero {
+			} else if totalNonZero {
 				// TOTAL is non-zero but ACTIVE is zero - yellow
 				styles.Yellow(escapedLine)
 			} else {
