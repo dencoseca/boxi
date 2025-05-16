@@ -304,22 +304,17 @@ func showInfo() {
 		os.Exit(1)
 	}
 
-	// Split the output into lines
 	lines := strings.Split(output, "\n")
-
-	// Print the header line as is
 	if len(lines) > 0 {
 		fmt.Println(lines[0])
 	}
 
-	// Process each data line
 	for i := 1; i < len(lines); i++ {
 		line := lines[i]
 		if line == "" {
 			continue
 		}
 
-		// Check if the line contains non-zero values
 		fields := strings.Fields(line)
 		if len(fields) >= 4 {
 			// The numeric fields start from index 1 for "Images" and "Containers",
@@ -330,30 +325,23 @@ func showInfo() {
 				numericStartIndex = 2
 			}
 
-			// Check TOTAL and ACTIVE columns
 			totalIndex := numericStartIndex
 			activeIndex := numericStartIndex + 1
 
-			// Check if TOTAL and ACTIVE are non-zero
 			totalNonZero := totalIndex < len(fields) && fields[totalIndex] != "0" && fields[totalIndex] != "0B"
 			activeNonZero := activeIndex < len(fields) && fields[activeIndex] != "0" && fields[activeIndex] != "0B"
 
 			// Escape percentage signs to avoid fmt.Sprintf issues
 			escapedLine := strings.ReplaceAll(line, "%", "%%")
 
-			// Apply color based on TOTAL and ACTIVE values
 			if totalNonZero && activeNonZero {
-				// Both TOTAL and ACTIVE are non-zero - green
 				styles.Green(escapedLine)
 			} else if totalNonZero {
-				// TOTAL is non-zero but ACTIVE is zero - yellow
 				styles.Yellow(escapedLine)
 			} else {
-				// Both TOTAL and ACTIVE are zero - no color
 				fmt.Println(line)
 			}
 		} else {
-			// If we can't parse the line properly, just print it as is
 			fmt.Println(line)
 		}
 	}
